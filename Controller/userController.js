@@ -1,16 +1,9 @@
-import userModel from "../model/userModel.js";
+import taskModel from "../model/taskModel.js";
 
 export const create = async (req, res) => {
   try {
-    const newUser = new userModel(req.body);
-    const { email } = newUser;
-
-    const userExist = await userModel.findOne({ email });
-    if (userExist) {
-      return res.status(400).json({ message: "User already exists." });
-    }
-
-    const savedData = await newUser.save();
+    const newTask = new taskModel(req.body);
+    const savedData = await newTask.save();
     res.status(200).json(savedData);
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
@@ -19,11 +12,11 @@ export const create = async (req, res) => {
 
 export const getAllUsers = async(req,res)=>{
   try{
-    const userData= await userModel.find();
-    if(!userData || userData.length===0){
+    const TaskData= await taskModel.find();
+    if(!TaskData || TaskData.length===0){
       return res.status(404).json({message:"User data not found."});
     }
-    res.status(200).json({ userData });
+    res.status(200).json({ TaskData });
   }catch(error){
     res.status(500).json({ errorMessage: error.message });
   }
@@ -32,11 +25,11 @@ export const getAllUsers = async(req,res)=>{
 export const getUserById = async(req,res)=>{
   try{
         const id = req.params.id;
-        const userExist = await userModel.findById(id);
-        if (!userExist){
+        const taskExist = await taskModel.findById(id);
+        if (!taskExist){
           return res.status(400).json({message:"User not found."});
         }
-        res.status(200).json({ userExist });
+        res.status(200).json({ taskExist });
   }catch(error){ 
   res.status(500).json({errorMessage: error.message});
 }
@@ -45,11 +38,11 @@ export const getUserById = async(req,res)=>{
 export const updateUserById = async(req,res)=>{
   try{
         const id = req.params.id;
-        const userExist = await userModel.findById(id);
-        if (!userExist){
+        const taskExist = await taskModel.findById(id);
+        if (!taskExist){
           return res.status(400).json({message:"User not found."});
         }
-        const UpdatedData = await userModel.findByIdAndUpdate(id, req.body,{
+        const UpdatedData = await taskModel.findByIdAndUpdate(id, req.body,{
           new:true
         })
         res.status(200).json(UpdatedData);
@@ -62,11 +55,11 @@ export const updateUserById = async(req,res)=>{
 export const deleteUserById = async(req,res) => {
   try{
         const id = req.params.id;
-        const userExist = await userModel.findById(id);
-        if (!userExist){
+        const taskExist = await taskModel.findById(id);
+        if (!taskExist){
           return res.status(400).json({message:"User not found."});
         }
-        await userModel.findByIdAndDelete(id)
+        await taskModel.findByIdAndDelete(id)
         res.status(200).json({message:"Deleted User"});
   }
   catch (error){
