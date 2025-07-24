@@ -1,68 +1,23 @@
-import taskModel from "../model/taskModel.js";
+import userModel from "../model/userModel.js";
 
-export const create = async (req, res) => {
+export const login = async (req,res) =>{
+
+}
+
+export const signup = async (req, res) => {
   try {
-    const newTask = new taskModel(req.body);
-    const savedData = await newTask.save();
-    res.status(200).json(savedData);
+    const { email, ...rest } = req.body;
+    const existingUser = await userModel.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ errorMessage: "Email already exists." });
+    }
+    if (!email.endsWith("@gmail.com")) {
+      return res.status(400).json({ errorMessage: "Only Gmail addresses are allowed." });
+    }
+    const newUser = new userModel({ email, ...rest });
+    const saveUser = await newUser.save();
+    res.status(200).json(saveUser);
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
 };
-
-export const getAllUsers = async(req,res)=>{
-  try{
-    const TaskData= await taskModel.find();
-    if(!TaskData || TaskData.length===0){
-      return res.status(404).json({message:"User data not found."});
-    }
-    res.status(200).json({ TaskData });
-  }catch(error){
-    res.status(500).json({ errorMessage: error.message });
-  }
-};
-
-export const getUserById = async(req,res)=>{
-  try{
-        const id = req.params.id;
-        const taskExist = await taskModel.findById(id);
-        if (!taskExist){
-          return res.status(400).json({message:"User not found."});
-        }
-        res.status(200).json({ taskExist });
-  }catch(error){ 
-  res.status(500).json({errorMessage: error.message});
-}
-};
-
-export const updateUserById = async(req,res)=>{
-  try{
-        const id = req.params.id;
-        const taskExist = await taskModel.findById(id);
-        if (!taskExist){
-          return res.status(400).json({message:"User not found."});
-        }
-        const UpdatedData = await taskModel.findByIdAndUpdate(id, req.body,{
-          new:true
-        })
-        res.status(200).json(UpdatedData);
-  }
-  catch (error){
-    res.status(500).json({errorMessage:error.message});
-  }
-}
-
-export const deleteUserById = async(req,res) => {
-  try{
-        const id = req.params.id;
-        const taskExist = await taskModel.findById(id);
-        if (!taskExist){
-          return res.status(400).json({message:"User not found."});
-        }
-        await taskModel.findByIdAndDelete(id)
-        res.status(200).json({message:"Deleted User"});
-  }
-  catch (error){
-    res.status(500).json({errorMessage:error.message});
-  }
-}

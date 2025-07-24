@@ -16,5 +16,4 @@ const UserSchema =  new mongoose.Schema({
     }
 })
 
-//here user name is anohter
 export default mongoose.model("user",UserSchema)
