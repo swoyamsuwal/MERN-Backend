@@ -2,9 +2,6 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import userModel from "../model/userModel.js";
 
-
-const JWT_SECRET = process.env.JWT_SECRET;
-
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -25,7 +22,12 @@ export const login = async (req, res) => {
       { expiresIn: "15m" }
     );
 
-    res.status(200).json({ message: "Login successful", token });
+    // Send token and user name
+    res.status(200).json({ 
+      message: "Login successful", 
+      token,
+      name: user.name
+    });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }

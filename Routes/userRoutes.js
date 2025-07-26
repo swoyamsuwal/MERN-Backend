@@ -5,11 +5,11 @@ const route = express.Router();
 // ================= TASK CONTROLLER =================
 import { createTasks, deleteTaskById, getAllTasks, getTaskById, updateTaskById } from "../Controller/taskController.js";
 
-route.post("/task", createTasks);
-route.get("/taskdata", getAllTasks);
-route.get("/task/:id", getTaskById);
-route.put("/update/task/:id", updateTaskById);
-route.delete("/delete/task/:id", deleteTaskById);
+route.post("/task",authenticateJWT, createTasks);
+route.get("/taskdata",authenticateJWT, getAllTasks);
+route.get("/task/:id",authenticateJWT, getTaskById);
+route.put("/update/task/:id",authenticateJWT, updateTaskById);
+route.delete("/delete/task/:id",authenticateJWT, deleteTaskById);
 
 // ================= USER CONTROLLER =================
 
