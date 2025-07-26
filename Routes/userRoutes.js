@@ -15,7 +15,7 @@ route.delete("/delete/task/:id", authenticateJWT, deleteTaskById);
 
 import { login ,signup} from "../Controller/userController.js";
 
-route.post("/login", login);
-route.post("/signup",signup );
+route.post("/auth/login", login);
+route.post("/auth/signup",signup );
 
 export default route;
