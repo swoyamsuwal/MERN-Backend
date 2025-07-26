@@ -16,6 +16,6 @@ route.delete("/delete/task/:id", deleteTaskById);
 import { login ,signup} from "../Controller/userController.js";
 
 route.post("/auth/login", login);
-route.post("/auth/signup",signup );
+route.post("/signup",signup );
 
 export default route;
