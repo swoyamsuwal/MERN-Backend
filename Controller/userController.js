@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import userModel from "../model/userModel.js";
+import userModel from "../Model/userModel.js";
 
 export const login = async (req, res) => {
   try {
@@ -16,18 +16,9 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    const token = jwt.sign(
-      { id: user._id, email: user.email },
-      process.env.JWT_SECRET,
-      { expiresIn: "15m" }
-    );
+    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "15m" });
 
-    // Send token and user name
-    res.status(200).json({ 
-      message: "Login successful", 
-      token,
-      name: user.name
-    });
+    res.status(200).json({ message: "Login successful", token, name: user.name });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
@@ -54,5 +45,20 @@ export const signup = async (req, res) => {
     res.status(201).json({ message: "User registered successfully", user: savedUser });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
+  }
+};
+
+export const googleCallback = async (req, res) => {
+  try {
+    const user = req.user;
+
+    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
+
+    // Redirect with token to frontend
+    res.redirect(`http://localhost:3000/?token=${token}`);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
