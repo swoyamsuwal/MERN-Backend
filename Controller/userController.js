@@ -52,12 +52,12 @@ export const googleCallback = async (req, res) => {
   try {
     const user = req.user;
 
-    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { 
       expiresIn: "15m",
-    });
+     });
 
-    // Redirect with token to frontend
-    res.redirect(`http://localhost:3000/?token=${token}`);
+    // Redirect with token to /task on frontend
+    res.redirect(`http://localhost:3000/task?token=${token}`);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
