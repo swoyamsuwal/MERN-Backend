@@ -57,7 +57,7 @@ export const googleCallback = async (req, res) => {
      });
 
     // Redirect with token to /task on frontend
-    res.redirect(`http://localhost:3000/task?token=${token}`);
+    res.redirect(`http://localhost:3000/task?token=${token}&name=${encodeURIComponent(user.name)}`);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
